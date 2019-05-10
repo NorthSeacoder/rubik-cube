@@ -1,39 +1,63 @@
 <template>
-<div class="hello" @mousedown="handleMouseDown">
-  <h1>{{ title }}</h1>
-  <div class="button-group">
-    <div class="button" @click="rotate('r', 1)">R</div>
-    <div class="button" @click="rotate('r', -1)">R'</div>
-    <div class="button" @click="rotate('u', -1)">U</div>
-    <div class="button" @click="rotate('u', 1)">U'</div>
-    <div class="button" @click="rotate('b', 1)">B'</div>
-    <div class="button" @click="rotate('b', -1)">B</div>
-    <div class="button" @click="rotate('f', -1)">F'</div>
-    <div class="button" @click="rotate('f', 1)">F</div>
-    <div class="button" @click="rotate('d', 1)">D</div>
-    <div class="button" @click="rotate('d', -1)">D'</div>
-    <div class="button" @click="rotate('l', 1)">L'</div>
-    <div class="button" @click="rotate('l', -1)">L</div>
-    <div class="button" @click="randomRotate(25,true)">随机打乱</div>
+  <div class="hello"
+       @mousedown="handleMouseDown">
+    <h1>{{ title }}</h1>
+    <div class="button-group">
+      <div class="button"
+           @click="rotate('r', 1)">R</div>
+      <div class="button"
+           @click="rotate('r', -1)">R'</div>
+      <div class="button"
+           @click="rotate('u', -1)">U</div>
+      <div class="button"
+           @click="rotate('u', 1)">U'</div>
+      <div class="button"
+           @click="rotate('b', 1)">B'</div>
+      <div class="button"
+           @click="rotate('b', -1)">B</div>
+      <div class="button"
+           @click="rotate('f', -1)">F'</div>
+      <div class="button"
+           @click="rotate('f', 1)">F</div>
+      <div class="button"
+           @click="rotate('d', 1)">D</div>
+      <div class="button"
+           @click="rotate('d', -1)">D'</div>
+      <div class="button"
+           @click="rotate('l', 1)">L'</div>
+      <div class="button"
+           @click="rotate('l', -1)">L</div>
+      <div class="button"
+           @click="randomRotate(25,true)">随机打乱</div>
+    </div>
+    <div class="opacity-set">
+      <label>透明度</label>
+      <input @mousemove.stop="()=>{}"
+             type="range"
+             v-model="opacity"
+             min="0"
+             max="100">
+    </div>
+    <div class="cube"
+         :style="'transform: rotateX('+rotateX+'deg) rotateY('+rotateY+'deg)'">
+      <Cube v-for="position in positions"
+            :position="position"
+            :ref="position[0]+'-'+position[1]+'-'+position[2]"
+            :key="position[0]+'-'+position[1]+'-'+position[2]"
+            :id="position[0]+'-'+position[1]+'-'+position[2]"
+            :opacity="opacity/100"></Cube>
+    </div>
   </div>
-  <div class="opacity-set">
-    <label>透明度</label>
-    <input @mousemove.stop="()=>{}" type="range" v-model="opacity" min="0" max="100">
-  </div>
-  <div class="cube" :style="'transform: rotateX('+rotateX+'deg) rotateY('+rotateY+'deg)'">
-    <Cube v-for="position in positions" :position="position" :ref="position[0]+'-'+position[1]+'-'+position[2]" :key="position[0]+'-'+position[1]+'-'+position[2]" :id="position[0]+'-'+position[1]+'-'+position[2]" :opacity="opacity/100"></Cube>
-  </div>
-</div>
 </template>
 
 <script>
 import Cube from './Cube';
 
-const positions = []
+const positions = [];
 for (let x = 1; x < 4; x++) {
   for (let y = 1; y < 4; y++) {
     for (let z = 1; z < 4; z++) {
-      positions.push([x, y, z])
+      positions.push([x, y, z]);
     }
   }
 }
@@ -45,8 +69,10 @@ function generateRandomRotateParams(last) {
   };
 
   const isReserve = (lhs, rhs) => {
-    return lhs.direction === rhs.direction && lhs.clockwise + rhs.clockwise === 0
-  }
+    return (
+      lhs.direction === rhs.direction && lhs.clockwise + rhs.clockwise === 0
+    );
+  };
 
   const directions = ['r', 'u', 'b', 'f', 'd', 'l'];
   param.direction = directions[Math.floor(Math.random() * 6)];
@@ -78,10 +104,10 @@ export default {
   methods: {
     rotate(direction, clockwise, callback, isnotclick) {
       if (this.looping && !isnotclick) {
-        return
+        return;
       }
       if (this.rotateing) {
-        return
+        return;
       }
       let coordinate = '';
       let position = 0;
@@ -89,33 +115,33 @@ export default {
         case 'r':
           coordinate = 'y';
           position = 3;
-          break
+          break;
         case 'u':
           coordinate = 'z';
           position = 3;
-          break
+          break;
         case 'l':
           coordinate = 'y';
           position = 1;
-          break
+          break;
         case 'd':
           coordinate = 'z';
           position = 1;
-          break
+          break;
         case 'f':
           coordinate = 'x';
           position = 3;
-          break
+          break;
         case 'b':
           coordinate = 'x';
           position = 1;
-          break
+          break;
         default:
-          console.log('error direction')
+          console.log('error direction');
       }
       this.rotateing = true;
       const list = this.$children.filter(item => item[coordinate] == position);
-      list.forEach((item) => {
+      list.forEach(item => {
         Object.assign(item.colorCache, item.color);
         item.$el.style.transition = 'all .5s ease-in-out';
         if (coordinate == 'y') {
@@ -125,40 +151,76 @@ export default {
         } else if (coordinate == 'z') {
           item.rotateY += clockwise;
         }
-      })
+      });
       setTimeout(() => {
-        list.forEach((item) => {
+        list.forEach(item => {
           item.$el.style.transition = 'none';
           if (coordinate == 'y') {
             item.rotateX = 0;
             if (clockwise == 1) {
-              this.changeColor(this.$refs[`${this.transpose(item.z)}-${item.y}-${item.x}`][0], item, 'x', 'z', 'y')
+              this.changeColor(
+                this.$refs[`${this.transpose(item.z)}-${item.y}-${item.x}`][0],
+                item,
+                'x',
+                'z',
+                'y'
+              );
             } else {
-              this.changeColor(this.$refs[`${item.z}-${item.y}-${this.transpose(item.x)}`][0], item, 'z', 'x', 'y')
+              this.changeColor(
+                this.$refs[`${item.z}-${item.y}-${this.transpose(item.x)}`][0],
+                item,
+                'z',
+                'x',
+                'y'
+              );
             }
           } else if (coordinate == 'x') {
             item.rotateZ = 0;
             if (clockwise == 1) {
-              this.changeColor(this.$refs[`${item.x}-${item.z}-${this.transpose(item.y)}`][0], item, 'z', 'y', 'x')
+              this.changeColor(
+                this.$refs[`${item.x}-${item.z}-${this.transpose(item.y)}`][0],
+                item,
+                'z',
+                'y',
+                'x'
+              );
             } else {
-              this.changeColor(this.$refs[`${item.x}-${this.transpose(item.z)}-${item.y}`][0], item, 'y', 'z', 'x')
+              this.changeColor(
+                this.$refs[`${item.x}-${this.transpose(item.z)}-${item.y}`][0],
+                item,
+                'y',
+                'z',
+                'x'
+              );
             }
           } else if (coordinate == 'z') {
             item.rotateY = 0;
             if (clockwise == 1) {
-              this.changeColor(this.$refs[`${this.transpose(item.y)}-${item.x}-${item.z}`][0], item, 'x', 'y', 'z')
+              this.changeColor(
+                this.$refs[`${this.transpose(item.y)}-${item.x}-${item.z}`][0],
+                item,
+                'x',
+                'y',
+                'z'
+              );
             } else {
-              this.changeColor(this.$refs[`${item.y}-${this.transpose(item.x)}-${item.z}`][0], item, 'y', 'x', 'z')
+              this.changeColor(
+                this.$refs[`${item.y}-${this.transpose(item.x)}-${item.z}`][0],
+                item,
+                'y',
+                'x',
+                'z'
+              );
             }
           }
-        })
+        });
         this.rotateing = false;
         if (callback) {
           setTimeout(() => {
-            callback()
-          }, 120)
+            callback();
+          }, 120);
         }
-      }, 500)
+      }, 500);
     },
     changeColor(c1, c2, d1, d2, d3) {
       c1.color = {
@@ -167,22 +229,22 @@ export default {
         [`${d2}3`]: c2.colorCache[`${d1}3`],
         [`${d2}1`]: c2.colorCache[`${d1}1`],
         [`${d3}1`]: c2.colorCache[`${d3}1`],
-        [`${d3}3`]: c2.colorCache[`${d3}3`],
-      }
+        [`${d3}3`]: c2.colorCache[`${d3}3`]
+      };
     },
     transpose(x) {
       if (x == 1) {
-        return 3
+        return 3;
       } else if (x == 3) {
-        return 1
+        return 1;
       }
-      return 2
+      return 2;
     },
     handleMouseDown(e) {
       this.dragging = true;
       let firstX = e.clientX;
       let firstY = e.clientY;
-      const handleMouseMove = (event) => {
+      const handleMouseMove = event => {
         this.rotateY += (event.clientX - firstX) * 0.5;
         this.rotateX -= (event.clientY - firstY) * 0.5;
         firstX = event.clientX;
@@ -202,7 +264,7 @@ export default {
 
     randomRotate(loopNum, isClick, lastParam) {
       if ((this.looping && isClick) || this.rotateing) {
-        return
+        return;
       }
       if (loopNum <= 0) {
         this.looping = false;
@@ -214,12 +276,14 @@ export default {
       this.rotate(
         param.direction,
         param.clockwise,
-        this.randomRotate.bind(this, loopNum - 1, false, param), true);
-    },
+        this.randomRotate.bind(this, loopNum - 1, false, param),
+        true
+      );
+    }
   },
   components: {
-    Cube,
-  },
+    Cube
+  }
 };
 </script>
 

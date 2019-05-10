@@ -10,18 +10,19 @@ import CubeCore from './components/CubeCore';
 export default {
   name: 'app',
   components: {
-    CubeCore,
-  },
+    CubeCore
+  }
 };
 </script>
 
 <style>
-html,body{
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    font-size: 60px;
-    user-select:none;
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  font-size: 60px;
+  user-select: none;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

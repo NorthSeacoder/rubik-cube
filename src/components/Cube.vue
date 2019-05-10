@@ -19,7 +19,7 @@ function myBrowser() {
   const userAgent = navigator.userAgent; // 取得浏览器的userAgent字符串
   const isOpera = userAgent.indexOf('Opera') > -1;
   if (isOpera) {
-    return 'Opera'
+    return 'Opera';
   } // 判断是否Opera浏览器
   if (userAgent.indexOf('Firefox') > -1) {
     return 'FF';
@@ -30,10 +30,14 @@ function myBrowser() {
   if (userAgent.indexOf('Safari') > -1) {
     return 'Safari';
   } // 判断是否Safari浏览器
-  if (userAgent.indexOf('compatible') > -1 && userAgent.indexOf('MSIE') > -1 && !isOpera) {
+  if (
+    userAgent.indexOf('compatible') > -1 &&
+    userAgent.indexOf('MSIE') > -1 &&
+    !isOpera
+  ) {
     return 'IE';
   } // 判断是否IE浏览器
-  return 'none'
+  return 'none';
 }
 export default {
   props: ['position', 'opacity'],
@@ -51,29 +55,29 @@ export default {
         y1: '',
         y3: '',
         z1: '',
-        z3: '',
+        z3: ''
       },
       colorCache: {}
-    }
+    };
   },
   mounted() {
     this.x = this.position[0];
     this.y = this.position[1];
     this.z = this.position[2];
     if (this.position[1] == 1) {
-      this.color.y1 = '#0500c1'
+      this.color.y1 = '#0500c1';
     } else if (this.position[1] == 3) {
-      this.color.y3 = '#138804'
+      this.color.y3 = '#138804';
     }
     if (this.position[2] == 1) {
-      this.color.z1 = '#f7f8f5'
+      this.color.z1 = '#f7f8f5';
     } else if (this.position[2] == 3) {
-      this.color.z3 = '#f9fd0c'
+      this.color.z3 = '#f9fd0c';
     }
     if (this.position[0] == 1) {
-      this.color.x1 = '#f9640a'
+      this.color.x1 = '#f9640a';
     } else if (this.position[0] == 3) {
-      this.color.x3 = '#c50209'
+      this.color.x3 = '#c50209';
     }
   },
   computed: {
@@ -81,52 +85,53 @@ export default {
       let transform = '';
       let transformOrigin = '';
       if (this.position[1] == 1) {
-        transform = 'translateX(-1.1em)'
-        transformOrigin = '1.6em'
+        transform = 'translateX(-1.1em)';
+        transformOrigin = '1.6em';
       } else if (this.position[1] == 3) {
-        transform = 'translateX(1.1em)'
-        transformOrigin = '-.6em'
+        transform = 'translateX(1.1em)';
+        transformOrigin = '-.6em';
       } else if (this.position[1] == 2) {
-        transform = 'translateX(-0em)'
-        transformOrigin = '0.5em'
+        transform = 'translateX(-0em)';
+        transformOrigin = '0.5em';
       }
       if (this.position[2] == 1) {
-        transform += ' translateY(1.1em)'
-        transformOrigin += ' -0.6em'
+        transform += ' translateY(1.1em)';
+        transformOrigin += ' -0.6em';
       } else if (this.position[2] == 3) {
-        transform += ' translateY(-1.1em)'
-        transformOrigin += ' 1.6em'
+        transform += ' translateY(-1.1em)';
+        transformOrigin += ' 1.6em';
       } else if (this.position[2] == 2) {
-        transform += ' translateY(-0em)'
-        transformOrigin += ' 0.5em'
+        transform += ' translateY(-0em)';
+        transformOrigin += ' 0.5em';
       }
       const mb = myBrowser();
       if (this.position[0] == 1) {
         if (mb == 'Safari') {
-          transform += ' translateZ(0em)'
+          transform += ' translateZ(0em)';
         } else {
-          transform += ' translateZ(-1.1em)'
+          transform += ' translateZ(-1.1em)';
         }
-        transformOrigin += ' 1.1em'
+        transformOrigin += ' 1.1em';
       } else if (this.position[0] == 3) {
         if (mb == 'Safari') {
-          transform += ' translateZ(0em)'
+          transform += ' translateZ(0em)';
         } else {
-          transform += ' translateZ(1.1em)'
+          transform += ' translateZ(1.1em)';
         }
-        transformOrigin += ' -1.1em'
+        transformOrigin += ' -1.1em';
       } else if (this.position[0] == 2) {
-        transform += ' translateZ(-0em)'
-        transformOrigin += ' 0em'
+        transform += ' translateZ(-0em)';
+        transformOrigin += ' 0em';
       }
-      transform += ` rotateX(${this.rotateX * 90}deg) rotateY(${this.rotateY * 90}deg) rotateZ(${this.rotateZ * 90}deg)`
+      transform += ` rotateX(${this.rotateX * 90}deg) rotateY(${this.rotateY *
+        90}deg) rotateZ(${this.rotateZ * 90}deg)`;
       return {
         transform,
-        transformOrigin,
-      }
+        transformOrigin
+      };
     }
-  },
-}
+  }
+};
 </script>
 
 <style>
@@ -147,34 +152,34 @@ export default {
   width: 1rem;
   height: 1rem;
   box-sizing: border-box;
-  border: 1px solid rgba(0, 0, 0, .1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   line-height: 1rem;
-  background: rgba(158,158,158,.5);
+  background: rgba(158, 158, 158, 0.5);
   font-size: 20px;
   text-align: center;
 }
 
 .face:nth-child(1) {
-  transform: translateZ(.5rem);
+  transform: translateZ(0.5rem);
 }
 
 .face:nth-child(2) {
-  transform: translateX(.5rem) rotateY(90deg);
+  transform: translateX(0.5rem) rotateY(90deg);
 }
 
 .face:nth-child(3) {
-  transform: translateY(.5rem) rotateX(90deg);
+  transform: translateY(0.5rem) rotateX(90deg);
 }
 
 .face:nth-child(4) {
-  transform: translateX(-.5rem) rotateY(90deg);
+  transform: translateX(-0.5rem) rotateY(90deg);
 }
 
 .face:nth-child(5) {
-  transform: translateY(-.5rem) rotateX(90deg);
+  transform: translateY(-0.5rem) rotateX(90deg);
 }
 
 .face:nth-child(6) {
-  transform: translateZ(-.5rem);
+  transform: translateZ(-0.5rem);
 }
 </style>
